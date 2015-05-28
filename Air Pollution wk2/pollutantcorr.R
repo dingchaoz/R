@@ -1,4 +1,4 @@
-pollutantnobs <- function(directory, id) {
+corr <- function(directory, threshold) {
   
   #Diretory where all files are stored
   directory <- "C:/Users/ks692/Documents/Dingchao/Courses/R/specdata/"
@@ -12,39 +12,32 @@ pollutantnobs <- function(directory, id) {
   #combine the large lists of tables into one and store in data var
   assign('data',do.call(rbind, tables))
   
+  # remove all the NA of sulfate and nitrate colu
+  fildata <- subset(data,!is.na(data$sulfate)&!is.na(data$nitrate))
+  
   ## 'id' is an integer vector indicating the monitor ID numbers
   ## to be used
-  #Get the length of id
-  length <- length(id)
+  #Get the length of all files
+  length <- length(files)
   
   #Create the data.frame as res
-  res <- data.frame(id=numeric(length), nobs = numeric(length))
+  #res <- data.frame(id=numeric(length), nobs = numeric(length))
+  
+  res <- numeric(0)
   
   # Loop into to update values of the res data.frame
-  for (i in 1:length(id)) {
+  for (i in 1:length) {
     
-    # subset selected ID data into temp var
-    temp <- subset(data,data$ID == id[i])
-    
-    # count var initiate
-    count <- 0 
-    
-    # loop into temp var to count nobs
-    for (j in 1: length(temp$ID)) {
+    # count the completed observations
+    count <- sum(fildata$ID == i)
+       
+    # if the count is larger than the threshold
+    if(count > threshold){
       
-      #if sulfate and nitrate are not NA
-      if(!is.na(temp$sulfate[j]) & !is.na(temp$nitrate[j])) {
-        
-        count <- count +1
-        #print ("ok")
-      }
+      temp <- subset(fildata,fildata$ID == i)
+      
+      res <- c(res,cor(temp$sulfate,temp$nitrate))
     }
-    
-    # set the id value
-    res[i,1] <- id[i]
-    
-    # set the nobs value
-    res[i,2] <- count
   }
   
   #print(head(data,5))
@@ -58,7 +51,7 @@ pollutantnobs <- function(directory, id) {
   ## number of complete cases
   
   return(res)
- 
   
-
+  
+  
 }
