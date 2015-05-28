@@ -30,12 +30,13 @@ pollutantnobs <- function(directory, id) {
     count <- 0 
     
     # loop into temp var to count nobs
-    for (i in 1: length(temp$ID)) {
+    for (j in 1: length(temp$ID)) {
       
       #if sulfate and nitrate are not NA
-      if(!is.na(temp$sulfate[i]) & !is.na(temp$nitrate[i])) {
+      if(!is.na(temp$sulfate[j]) & !is.na(temp$nitrate[j])) {
         
-         count ++
+        count <- count +1
+        #print ("ok")
       }
     }
     
