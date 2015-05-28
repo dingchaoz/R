@@ -12,6 +12,9 @@ pollutantnobs <- function(directory, id) {
   #combine the large lists of tables into one and store in data var
   assign('data',do.call(rbind, tables))
   
+  # remove all the NA of sulfate and nitrate colu
+  fildata <- subset(data,!is.na(data$sulfate)&!is.na(data$nitrate))
+  
   ## 'id' is an integer vector indicating the monitor ID numbers
   ## to be used
   #Get the length of id
@@ -23,22 +26,10 @@ pollutantnobs <- function(directory, id) {
   # Loop into to update values of the res data.frame
   for (i in 1:length(id)) {
     
-    # subset selected ID data into temp var
-    temp <- subset(data,data$ID == id[i])
     
     # count var initiate
-    count <- 0 
+    count <- sum(fildata$ID == id[i])
     
-    # loop into temp var to count nobs
-    for (j in 1: length(temp$ID)) {
-      
-      #if sulfate and nitrate are not NA
-      if(!is.na(temp$sulfate[j]) & !is.na(temp$nitrate[j])) {
-        
-        count <- count +1
-        #print ("ok")
-      }
-    }
     
     # set the id value
     res[i,1] <- id[i]
