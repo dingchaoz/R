@@ -21,13 +21,21 @@ pollutantmean <- function(directory, pollutant, id) {
   
   # subset data to the rows and column defined by user input
   temp <- subset(data,data$ID >= id[1] & data$ID <= id[length(id)])
-  print(head(temp))
+  #print(head(temp))
   
-  pollutant <- sulfate
+  #if the 2nd input matches sulfate string,assign that column to temp var
+  if (pollutant == "sulfate") {
+    temp <- temp$sulfate
+    
+  }
+  #else if the 2nd input matches nitrate string,assign that column to temp var
+  else if (pollutant == "nitrate") {
+    temp <- temp$nitrate
+    
+  }
   
-  temp <- temp$pollutant
   
-  print(head(temp))
+  #print(head(temp))
   
   # calculate mean without na value
   res <- mean(temp,na.rm = TRUE)
