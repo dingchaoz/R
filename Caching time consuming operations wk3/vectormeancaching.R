@@ -1,6 +1,8 @@
 #Usage example :
 #t <- makeVector(10:15)
 #t1 <- cachemean(t)
+# a good article to understand <<- and lexical scoping
+#http://r.789695.n4.nabble.com/What-does-the-quot-lt-lt-quot-operator-mean-td3466657.html
 
 # function to create a list of functions
 makeVector <- function(x = numeric()) {
