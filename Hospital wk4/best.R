@@ -3,6 +3,9 @@
 #with the name of the hospital that has the best (i.e. lowest) 30-day mortality for the specied outcome
 #in that state.
 
+# to do: handling ties to return by alphabic order
+# a stackoverflow to refer http://stackoverflow.com/questions/19300808/ties-when-finding-minimum-in-r
+
 best <- function(state, outcome) {
   
   
