@@ -1,19 +1,19 @@
 ## Put comments here that give an overall description of what your
 ## functions do
 #Usage example :
-#t <- makeCacheMatrix(10:15)
+#t <- makeCacheMatrix(matrix(10:13,nrow=2,ncol=2))
 #t1 <- cacheSolve(t)
 
 # function to create a list of functions
 makeCacheMatrix <- function(x = matrix()) {
   
   # m is the var holds mean, is set NULL as default value 
-  m <- NULL
+  i <- NULL
   
   # define set function
   set <- function(y) {
     x <<- y
-    m <<- NULL
+    i <<- NULL
   }
   
   # define get function
@@ -23,16 +23,16 @@ makeCacheMatrix <- function(x = matrix()) {
   # super assignment operator <<- is used, which starts the closing framework, works it way up to the global environment
   # until it finds a variable called mean 
   # super assignment operator can only be used in functions
-  setmean <- function(mean) m <<- mean
+  setinvers <- function(invers) i <<- invers
   
   # define getmean function, returns m var
-  getmean <- function() m
+  getinvers <- function() i
   
   # create the list with names are set, get, setmean, getmean
   # and assign the functions to the names
   list(set = set, get = get,
-       setmean = setmean,
-       getmean = getmean)
+       setinvers = setinvers,
+       getinvers = getinvers)
 }
 
 
@@ -40,25 +40,25 @@ makeCacheMatrix <- function(x = matrix()) {
 cacheSolve <- function(x, ...) {
   
   # get the mean value from x
-  m <- x$getmean()
+  i <- x$getinvers()
   
   # if mean is already calculated, then it will not be a null
-  if(!is.null(m)) {
+  if(!is.null(i)) {
     message("getting cached data")
     
     # return cached mean, once return, this function ends
-    return(m)
+    return(i)
   }
   
   # else get the vector that is the input of makeVector
   data <- x$get()
   
   # calculate mean and store it into var m
-  m <- mean(data, ...)
+  i <- solve(data, ...)
   
   # set the mean in setmean which uses a super assignment <<-
-  x$setmean(m)
+  x$setinvers(i)
   
   # return calculate mean value
-  m
+  i
 }
