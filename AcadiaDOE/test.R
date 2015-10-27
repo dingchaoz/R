@@ -6,10 +6,11 @@ library(ggplot2)
 data <- read.csv("AcadiaDOE/AcadiaDOE.csv",header = TRUE,stringsAsFactors=FALSE)
 
 # Create arrays to hold the SEID, Threshold and USL or not values
-SEID = c(5369,12493,10102,5978,5976,5366,5365)
-Threshold = c(0,1000,-5,-30,1500,1125,2125)
+#SEID = c(5369,12493,10102,5978,5976,5366,5365)
+SEID = c(5365,5366,5369,5976,5978,10102,12493)
+Threshold = c(2125,1125,0,1500,-30,-5,1000)
 # 1 means USL, 0 means LSL
-USL = c(0,1,0,0,1,1,1)
+USL = c(1,1,1,0,0,1,0)
 
 ## Order by SEID and create to a new data frame
 data2 <- data[order(data$SEID),]
@@ -17,7 +18,7 @@ data2 <- data[order(data$SEID),]
 data2 <- na.locf(data2)
 # Numericalize columns
 data2$Ppk <- as.numeric(data2$Ppk)
-data2$Max <- as.numeric(data2$Maxk)
+data2$Max <- as.numeric(data2$Max)
 data2$Min <- as.numeric(data2$Min)
 data2$Mean <- as.numeric(data2$Mean)
 data2$Std <- as.numeric(data2$Std)
@@ -34,7 +35,7 @@ ggplot(data2, aes(x=Test_No, y=Ppk, colour=System_Error,group = System_Error)) +
   labs(title="Ppk Trend Plot of All SEIDs, with NA replaced by Latest Non-NA value") +
   theme(axis.text.x  = element_text(angle=90, vjust=0.5, size=9))
 
-ggsave("AcadiaDOE/Rexport/PpkTrend_allSE.png")
+ggsave("AcadiaDOE/Rexport/PpkTrend_allSE_NAreplaced.png")
 
 ## Creat plot 2 to show the Ppk trendlines for all System Error, that NA is as blank
 ggplot(data, aes(x=Test_No, y=Ppk, colour=System_Error,group = System_Error)) +
@@ -44,7 +45,7 @@ ggplot(data, aes(x=Test_No, y=Ppk, colour=System_Error,group = System_Error)) +
   labs(title="Ppk Trend Plot of All SEIDs, with NA as blank value") +
   theme(axis.text.x  = element_text(angle=90, vjust=0.5, size=9))
 
-ggsave("AcadiaDOE/Rexport/PpkTrend_allSE_NAasblank.png")
+ggsave("AcadiaDOE/Rexport/PpkTrend_allSE.png")
 
 
 ## Creat plot 3 to show the possible variance box for all System Error, that NA is as blank
@@ -56,7 +57,7 @@ ggplot(data, aes(x=Test_No, y=Mean, colour=System_Error,group = System_Error)) +
   labs(title="Mean +/- 1 Standard Deviation Plot of All SEIDs") +
   theme(axis.text.x  = element_text(angle=90, vjust=0.5, size=9))
 
-ggsave("AcadiaDOE/Rexport/Mean+-Std_allSE_1std.png")
+ggsave("AcadiaDOE/Rexport/Mean+-1Std_allSE_1std.png")
 
 ## Creat plot 4 to show the possible variance box for all System Error, that NA is as blank
 pd <- position_dodge(.1)
@@ -69,16 +70,23 @@ ggplot(data, aes(x=Test_No, y=Mean, colour=System_Error,group = System_Error)) +
 
 ggsave("AcadiaDOE/Rexport/VarianceTrend_allSE_LogY.png")
 
+thd = c(2215,1125,1500,-30,-5,1000,0)
+c = c("gold","dark green","green","blue","purple","pink","red")
+lab = c("USL","USL","USL","LSL","LSL","USL","LSL")
+
+
 ## Creat plot 5 to show the recorded max,min,mea variance box for all System Error, that NA is as blank
 pd <- position_dodge(.1)
 ggplot(data, aes(x=Test_No, y=Mean, colour=System_Error,group = System_Error)) +
   geom_point(aes(y= Mean,shape = System_Error))+
   geom_pointrange(aes(ymin=Min, ymax=Max), width=.1, position=pd) +
-  ylim(-20,2000) +
+  geom_hline(yintercept = c(2215,1125,1500,-30,-5,1000,0),color = c,linetype = "longdash") +
+  geom_text(aes(8,thd,label = lab, vjust = -1)) + 
+  ylim(-35,2000) +
   labs(title="MinMaxMean Range Plot of All SEIDs") +
   theme(axis.text.x  = element_text(angle=90, vjust=0.5, size=9))
 
-ggsave("AcadiaDOE/Rexport/MinMaxMeanRange_allSE.png")
+ggsave("AcadiaDOE/Rexport/MinMaxMeanRange_allSE_withSpecs.png")
 
 ## Create plot 6 to show the possible variance range of all System Errors, that NA is replaced by latest Non-Na value
 pd <- position_dodge(.1)
@@ -92,10 +100,10 @@ ggplot(data2, aes(x=Test_No, y=Mean, colour=System_Error,group = System_Error)) 
 ggsave("AcadiaDOE/Rexport/VarianceTrend_allSE_NAreplaced_LogY.png")
 
 
+data2$SEID = as.numeric(data2$SEID)
 
 
-
-
+## Ppk Individual Plot
 for (i in 1:length(SEID)) {
   
   ### Subset the data of the current SEID
@@ -172,12 +180,16 @@ for (i in 1:length(SEID)) {
   
 }
 
+
+
+## Individual SE plots with thresholds
+
 for (i in 1:length(SEID)) {
   
   ### Subset the data of the current SEID
   
-  data3 <- subset(data,data$SEID == SEID[i])
-  title = paste0("MeanMaxMin range plot of SEID",SEID[i])
+  data3 <- subset(data2,data2$SEID == SEID[i])
+  title = paste0("MeanMaxMin range plot of System Error", data3$System_Error[[1]])
   ths = Threshold[i]
   if (USL[i] > 0){
     label = paste0("USL = ",ths)
@@ -193,9 +205,12 @@ for (i in 1:length(SEID)) {
     labs(title=title) +
     theme(axis.text.x  = element_text(angle=90, vjust=0.5, size=9))
   
-  PpkImage = paste0("AcadiaDOE/Rexport/","SEID",SEID[i],"_MeanMaxMinrange.png")
+  PpkImage = paste0("AcadiaDOE/Rexport/","System Error ",data3$System_Error[[1]],"_MeanMaxMinrange.png")
   
   ggsave(PpkImage)
   
 }
+
+
+
 
