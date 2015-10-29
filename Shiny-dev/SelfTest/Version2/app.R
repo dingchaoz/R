@@ -6,8 +6,6 @@ source("Setup.R")
 # connect to the server
 meta <- InitConn()
 
-# connect to the server
-#SetConnAll() 
 
 # Create UI fluid
 ui <- UICreate()

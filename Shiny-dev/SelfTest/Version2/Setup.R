@@ -6,6 +6,7 @@ library(RODBC)
 library(RSQLServer)
 library(ggplot2)
 
+## Define a function to list all the folders of a directory
 list.dirs <- function(path=".", pattern=NULL, all.dirs=FALSE,
                       full.names=FALSE, ignore.case=FALSE) {
   # use full.names=TRUE to pass to file.info
@@ -30,5 +31,5 @@ setwd(CodeDir)
 AllFolders <- list.dirs(CodeDir)
 # List all the R files in all the folders
 file.sources = list.files(list.dirs(CodeDir),pattern="*.R$", full.names=TRUE,ignore.case=TRUE)
-# Source all of them
+# Source all of scripts using sapply
 sapply(file.sources,source,.GlobalEnv)
