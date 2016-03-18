@@ -1,0 +1,3 @@
+h <- plot_ly(data = diamonds,type = "box",boxpoints = "all", jitter = 0.1, pointpos = 0, x = price, y = cut,color = cut,orientation ='h' )
+add_trace(x = rep(20000,length(seq(0,1,by=0.3))), y = seq(from = 0, to = 1, by = 0.3), mode = "lines", yaxis = "y2", marker = list(color = "red"),line = list(width = "1px"))
+layout(yaxis2 = list(overlaying = "y",range = c(0, 1),side = "right",showticklabels = F)) 

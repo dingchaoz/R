@@ -59,7 +59,7 @@ ggplot(data, aes(x=Test_No, y=Mean, colour=System_Error,group = System_Error)) +
   labs(title="Mean +/- 1 Standard Deviation Plot of All SEIDs") +
   theme(axis.text.x  = element_text(angle=90, vjust=0.5, size=9))
 
-ggsave("AcadiaDOE/Rexport2/Mean+-1Std_allSE_1std.png",height=9,width=12,dpi=72)
+ggsave("AcadiaDOE/Rexport2/Mean+-1Std_allSE_1std.pdf",width = 11,height = 8.5, units = "in")
 
 ## Creat plot 4 to show the possible variance box for all System Error, that NA is as blank
 pd <- position_dodge(.1)
@@ -70,7 +70,7 @@ ggplot(data, aes(x=Test_No, y=Mean, colour=System_Error,group = System_Error)) +
   labs(title="Variance Plot of All SEIDs, Logarithm of Y") +
   theme(axis.text.x  = element_text(angle=90, vjust=0.5, size=9))
 
-ggsave("AcadiaDOE/Rexport2/VarianceTrend_allSE_LogY.png")
+ggsave("AcadiaDOE/Rexport2/VarianceTrend_allSE_LogY.pdf",width = 11,height = 8.5, units = "in")
 
 
 # 
@@ -101,7 +101,7 @@ ggplot(data2, aes(x=Test_No, y=Mean, colour=System_Error,group = System_Error)) 
   labs(title="Variance Plot of All SEIDs, NA replaced by latest Non-NA value Logarithm of Y") +
   theme(axis.text.x  = element_text(angle=90, vjust=0.5, size=9))
 
-ggsave("AcadiaDOE/Rexport2/VarianceTrend_allSE_NAreplaced_LogY.png")
+ggsave("AcadiaDOE/Rexport2/VarianceTrend_allSE_NAreplaced_LogY.pdf",width = 11,height = 8.5, units = "in")
 
 
 data2$SEID = as.numeric(data2$SEID)
@@ -112,7 +112,7 @@ for (i in 1:length(SEID)) {
   
   ### Subset the data of the current SEID
   
-  data3 <- subset(data2,data2$SEID == SEID[i])
+  data3 <- data2[data2$SEID == SEID[i],]
   
   # Ppk Individual Plot
   title = paste0("Ppk plot of SEID",data3$SEID[1])
@@ -125,7 +125,7 @@ for (i in 1:length(SEID)) {
   
   PpkImage = paste0("AcadiaDOE/Rexport2/","SEID",data3$SEID[1],"_Ppk.pdf")
   
-  ggsave(PpkImage)
+  ggsave(PpkImage,width = 11,height = 8.5, units = "in")
   
   ## Standard Deviation Individual Plot
   title = paste0("Standard Deviation plot of SEID",data3$SEID[1])
@@ -136,7 +136,7 @@ for (i in 1:length(SEID)) {
   
   PpkImage = paste0("AcadiaDOE/Rexport2/","SEID",data3$SEID[1],"_Std.pdf")
   
-  ggsave(PpkImage)
+  ggsave(PpkImage,width = 11,height = 8.5, units = "in")
   
   ## Plot the variance individual plot
   title = paste0("Variance plot of SEID",data3$SEID[1])
@@ -157,7 +157,7 @@ for (i in 1:length(SEID)) {
   
   PpkImage = paste0("AcadiaDOE/Rexport2/","SEID",data3$SEID[1],"_Variance.pdf")
   
-  ggsave(PpkImage)
+  ggsave(PpkImage,width = 11,height = 8.5, units = "in")
   
   ## Plot the meanmaxmin range individual plot
   title = paste0("MeanMaxMin range plot of SEID",data3$SEID[1])
@@ -178,7 +178,7 @@ for (i in 1:length(SEID)) {
   
   PpkImage = paste0("AcadiaDOE/Rexport2/","SEID",data3$SEID[1],"_MeanMaxMinrange.pdf")
   
-  ggsave(PpkImage)
+  ggsave(PpkImage,width = 11,height = 8.5, units = "in")
   
   
   
@@ -192,7 +192,7 @@ for (i in 1:length(SEID)) {
   
   ### Subset the data of the current SEID
   
-  data3 <- subset(data2,data2$SEID == SEID[i])
+  data3 <- data2[data2$SEID == SEID[i],]
   title = paste0("MeanMaxMin range plot of System Error", data3$System_Error[[1]])
   ths = Threshold[i]
   if (USL[i] > 0){
@@ -211,7 +211,7 @@ for (i in 1:length(SEID)) {
   
   PpkImage = paste0("AcadiaDOE/Rexport2/","System Error ",data3$System_Error[[1]],"_MeanMaxMinrange.pdf")
   
-  ggsave(PpkImage)
+  ggsave(PpkImage,width = 11,height = 8.5, units = "in")
   
 }
 
